@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-slowstart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-slowstart
+  template:
+    metadata:
+      labels:
+        app: webapp-slowstart
+    spec:
+      containers:
+      - name: app
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Iniciando aplicación lenta..."
+          sleep 30  # Simula arranque lento
+          echo "OK" > /tmp/ready
+          echo "Aplicación lista"
+          sleep 3600
+        startupProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/ready
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          failureThreshold: 10  # 10 intentos * 5s = 50s máximo
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/ready
+          initialDelaySeconds: 0
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/ready
+          initialDelaySeconds: 0
+          periodSeconds: 5

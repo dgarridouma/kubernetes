@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-basic
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webapp-basic
+  template:
+    metadata:
+      labels:
+        app: webapp-basic
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-basic-svc
+spec:
+  selector:
+    app: webapp-basic
+  ports:
+  - port: 80
+    targetPort: 80
+  type: NodePort

@@ -1,0 +1,16 @@
+# Ejemplo 2: Aprovisionamiento dinámico con StorageClass
+# Este es el método recomendado en producción
+
+# Nota: En clusters gestionados (GKE, EKS, AKS) ya existe una StorageClass por defecto
+# En Docker Desktop, la StorageClass 'hostpath' viene preconfigurada
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: web-pvc-dynamic
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi

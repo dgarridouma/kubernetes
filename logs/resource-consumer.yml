@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-consumer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: resource-consumer
+  template:
+    metadata:
+      labels:
+        app: resource-consumer
+    spec:
+      containers:
+      - name: cpu-consumer
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Iniciando consumidor de recursos"
+          # Consumir CPU de manera controlada
+          while true; do
+            echo "Trabajando..." > /dev/null
+            sleep 0.1
+          done
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+      
+      - name: memory-consumer
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Iniciando consumidor de memoria"
+          # Crear algunos datos en memoria
+          while true; do
+            data=$(dd if=/dev/zero bs=1M count=10 2>/dev/null | base64)
+            sleep 5
+          done
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"

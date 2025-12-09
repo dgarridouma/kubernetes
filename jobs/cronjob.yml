@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: reloj
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: reloj
+            image: busybox
+            command: ["sh", "-c", "date && echo 'Tarea ejecutada'"]
+          restartPolicy: Never

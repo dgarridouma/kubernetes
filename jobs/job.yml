@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: procesar-ventas
+spec:
+  template:
+    spec:
+      containers:
+      - name: procesador
+        image: python:3.9-slim
+        command: 
+        - "python"
+        - "-c"
+        - |
+          import time
+          print("Iniciando procesamiento de ventas...")
+          time.sleep(5)
+          print("Ventas procesadas correctamente")
+      restartPolicy: Never  # Importante: Never o OnFailure
+  backoffLimit: 3  # Reintentos si falla

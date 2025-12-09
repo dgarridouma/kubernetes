@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  namespace: secure-demo
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+  namespace: secure-demo
+spec:
+  containers:
+    - name: nginx
+      image: nginx

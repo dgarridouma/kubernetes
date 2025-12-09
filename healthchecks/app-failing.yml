@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-failing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-failing
+  template:
+    metadata:
+      labels:
+        app: webapp-failing
+    spec:
+      containers:
+      - name: app
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          # Crear archivo de health inicial
+          echo "OK" > /tmp/healthy
+          echo "Aplicación iniciada"
+          
+          # Después de 60 segundos, eliminar el archivo
+          sleep 60
+          rm /tmp/healthy
+          echo "Health check fallará ahora"
+          
+          # Mantener el contenedor vivo
+          sleep 3600
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 2

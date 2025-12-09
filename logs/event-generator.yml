@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-gen
+  template:
+    metadata:
+      labels:
+        app: event-gen
+    spec:
+      containers:
+      - name: app
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Aplicación iniciada"
+          sleep 30
+          echo "Saliendo con error para generar eventos"
+          exit 1
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "exit 0"
+          initialDelaySeconds: 5
+          periodSeconds: 5

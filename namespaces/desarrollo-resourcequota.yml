@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-quota
+  namespace: desarrollo
+spec:
+  hard:
+    # Límites de recursos
+    requests.cpu: "4"          # Máximo 4 CPUs solicitados
+    requests.memory: 8Gi       # Máximo 8 GB memoria solicitada
+    limits.cpu: "8"            # Máximo 8 CPUs límite
+    limits.memory: 16Gi        # Máximo 16 GB memoria límite
+    
+    # Límites de objetos
+    pods: "10"                 # Máximo 10 pods
+    services: "5"              # Máximo 5 services
+    persistentvolumeclaims: "3" # Máximo 3 PVCs
+    configmaps: "10"           # Máximo 10 ConfigMaps
+    secrets: "10"              # Máximo 10 Secrets

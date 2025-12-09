@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: monitor-agente
+spec:
+  selector:
+    matchLabels:
+      app: monitor
+  template:
+    metadata:
+      labels:
+        app: monitor
+    spec:
+      containers:
+      - name: agente
+        image: busybox
+        command: 
+        - "sh"
+        - "-c"
+        - |
+          while true; do
+            echo "Monitoreando nodo: $(hostname)"
+            sleep 30
+          done

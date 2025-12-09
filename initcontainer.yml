@@ -1,0 +1,23 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ejemplo-initcontainer
+spec:
+  containers:
+    - name: app-container
+      image: busybox
+      command: ['sh', '-c', 'echo "Contenido del archivo:" && cat /data/mensaje.txt && sleep 3600']
+      volumeMounts:
+        - name: shared-data
+          mountPath: /data
+  initContainers:
+    - name: init-container
+      image: busybox
+      command: ['sh', '-c', 'echo "Hola desde initContainer" > /data/mensaje.txt']
+      volumeMounts:
+        - name: shared-data
+          mountPath: /data
+  volumes:
+    - name: shared-data
+      emptyDir: {}
