@@ -1,0 +1,30 @@
+Notas:
+Para probar network policies se puede usar Kind activado en Docker Desktop. Hay que habilitar también containerd para almacenar las imágenes.
+
+Paso 1: bajar manualmente las imágenes
+docker pull busybox
+docker pull nginx
+
+Paso 2:
+kubectl apply -f pod-a.yml
+kubectl apply -f pod-b.yml
+kubectl apply -f web.yml
+kubectl apply -f web-sevice.yml
+
+Paso 3:
+Probamos a conectar desde pod-a o pod-b a web:
+kubectl exec pod-a -- wget -O- http://web:80
+
+Por defecto, la comunicación está permitida
+
+Paso 4:
+kubectl apply -f deny-all.yml
+
+Si volvemos a intentar conectar, veremos que no se puede.
+
+Paso 5:
+kubectl apply -f allow-pod-a.yml
+
+Después de esto, solo el pod-a puede comunicarse con web
+
+
