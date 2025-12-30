@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: dev-limits
+  namespace: desarrollo
+spec:
+  limits:
+  # Límites para contenedores
+  - type: Container
+    max:
+      cpu: "2"
+      memory: "2Gi"
+    min:
+      cpu: "100m"
+      memory: "128Mi"
+    default:
+      cpu: "500m"
+      memory: "512Mi"
+    defaultRequest:
+      cpu: "200m"
+      memory: "256Mi"
+  
+  # Límites para Pods completos
+  - type: Pod
+    max:
+      cpu: "4"
+      memory: "4Gi"
+  
+  # Límites para PersistentVolumeClaims
+  - type: PersistentVolumeClaim
+    min:
+      storage: "1Gi"
+    max:
+      storage: "50Gi"
+
+---
+# Ejemplo de Pod sin límites especificados
+# Se le aplicarán los valores "default" y "defaultRequest"
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-sin-limites
+  namespace: desarrollo
+spec:
+  containers:
+  - name: app
+    image: nginx
+    # No especifica resources, así que obtiene:
+    # requests: cpu=200m, memory=256Mi
+    # limits: cpu=500m, memory=512Mi
+
+---
+# Ejemplo de Pod con límites específicos
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-con-limites
+  namespace: desarrollo
+spec:
+  containers:
+  - name: app
+    image: nginx
+    resources:
+      requests:
+        cpu: "300m"
+        memory: "512Mi"
+      limits:
+        cpu: "1"
+        memory: "1Gi"
+    # Estos valores son válidos porque están dentro del rango:
+    # min (100m/128Mi) <= valores <= max (2/2Gi)
