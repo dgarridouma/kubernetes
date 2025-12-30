@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp
+  namespace: secure-demo
+spec:
+  serviceAccountName: demo-sa
+  containers:
+  - name: app
+    image: nginx
