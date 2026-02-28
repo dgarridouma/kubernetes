@@ -1,5 +1,8 @@
 Notas:
 Para probar network policies se puede usar Kind activado en Docker Desktop. Hay que habilitar también containerd para almacenar las imágenes.
+También se puede usar en Minikube usando calico: 
+minikube delete (si el cluster ya existía)
+minikube start --cni=calico
 
 Paso 1: bajar manualmente las imágenes
 docker pull busybox
