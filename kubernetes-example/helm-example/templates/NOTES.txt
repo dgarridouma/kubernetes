@@ -1,0 +1,23 @@
+
+1. Para acceder a la aplicación web:
+
+{{- if eq .Values.web.service.type "LoadBalancer" }}
+   Se está creando un LoadBalancer. Obtén la IP externa con:
+     kubectl get svc {{ .Release.Name }}-web --namespace {{ .Release.Namespace }}
+{{- else if eq .Values.web.service.type "NodePort" }}
+   Usa el NodePort asignado:
+     kubectl get svc {{ .Release.Name }}-web --namespace {{ .Release.Namespace }}
+{{- else }}
+   El servicio es ClusterIP. Puedes hacer port-forward:
+     kubectl port-forward svc/{{ .Release.Name }}-web 4000:{{ .Values.web.service.port }} --namespace {{ .Release.Namespace }}
+   Luego accede a http://localhost:4000
+{{- end }}
+
+2. Redis está disponible en el servicio:
+   {{ .Release.Name }}-redis (puerto {{ .Values.redis.service.port }})
+
+3. Para ver los pods:
+   kubectl get pods --namespace {{ .Release.Namespace }}
+
+4. Para eliminar el release:
+   helm uninstall {{ .Release.Name }} --namespace {{ .Release.Namespace }}

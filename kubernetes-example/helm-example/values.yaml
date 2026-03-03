@@ -1,0 +1,22 @@
+web:
+  image:
+    repository: dgarridouma/get-started
+    tag: "part2"
+    pullPolicy: IfNotPresent
+  containerPort: 80
+  replicaCount: 1
+  env:
+    REDIS_HOST: redis
+  service:
+    type: LoadBalancer
+    port: 4000
+
+redis:
+  image:
+    repository: redis
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  containerPort: 6379
+  service:
+    type: ClusterIP
+    port: 6379
